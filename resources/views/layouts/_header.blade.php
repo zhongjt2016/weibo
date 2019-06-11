@@ -2,7 +2,11 @@
     <div class="container ">
         <a class="navbar-brand" href="{{ route('home') }}">Weibo App</a>
         <ul class="navbar-nav justify-content-end">
+<<<<<<< HEAD
             @if (Auth::check())
+=======
+            @if (\Illuminate\Support\Facades\Auth::check())
+>>>>>>> account-activation-password-resets
                 <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}">用户列表</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
