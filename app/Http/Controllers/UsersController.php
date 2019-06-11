@@ -109,16 +109,24 @@ class UsersController extends Controller
         });
     }
 
-    public function confirmEmail($token)
+    public function confirmEmail($id, $token)
     {
-        $user = User::where('activation_token', $token)->firstOrFail();
+        $user = User::find($id); //根据id找到用户
 
-        $user->activated = true;
-        $user->activation_token = null;
-        $user->save();
+        // 匹配 token ，确认激活，更新数据
+        if($user->activation_token == $token) {
+            $user->activated = true;
+            $user->activation_token = null;
+            $user->save();
 
-        Auth::login($user);
-        session()->flash('success', '恭喜你，激活成功！');
-        return redirect()->route('users.show', [$user]);
+            // 自动登陆，发送提示，重定向
+            Auth::login($user);
+            session()->flash('success', '恭喜你，激活成功！');
+            return redirect()->route('users.show', [$user]);
+        } else {
+            session()->flash('danger', '激活失败。请再次点击邮件中的链接重试');
+            return redirect('/');
+        }
+
     }
 }
