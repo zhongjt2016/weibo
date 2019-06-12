@@ -13,13 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-<<<<<<< HEAD
 
         $this->call(UsersTableSeeder::class);
+        $this->call(StatusesTableSeeder::class);
 
-=======
-        $this->call(UsersTableSeeder::class);
->>>>>>> account-activation-password-resets
         Model::reguard();
     }
 }

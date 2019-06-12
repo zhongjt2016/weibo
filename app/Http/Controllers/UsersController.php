@@ -12,11 +12,7 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth', [
-<<<<<<< HEAD
-            'except' => ['show', 'create', 'store', 'index']
-=======
             'except' => ['show', 'create', 'store', 'index', 'confirmEmail']
->>>>>>> account-activation-password-resets
         ]);
 
         $this->middleware('guest', [
@@ -34,12 +30,6 @@ class UsersController extends Controller
     public function create()
     {
         return view('users.create');
-    }
-
-    //用戶详情页
-    public function show(User $user)
-    {
-        return view('users.show', compact('user'));
     }
 
     //注册
@@ -134,38 +124,13 @@ class UsersController extends Controller
 
     }
 
-    //编辑页面
-    public function edit(User $user)
+    //用戶详情页
+    public function show(User $user)
     {
-        $this->authorize('update', $user);
-        return view('users.edit', compact('user'));
+        $statuses = $user->statuses()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        return view('users.show', compact('user', 'statuses'));
     }
 
-    //更新
-    public function update(User $user, Request $request)
-    {
-        $this->authorize('update', $user);
-        $this->validate($request, [
-            'name' => 'required|max:50',
-            'password' => 'nullable|confirmed|min:6'
-        ]);
-
-        $data = [];
-        $data['name'] = $request->name;
-        if ($request->password) {
-            $data['password'] = bcrypt($request->password);
-        }
-        $user->update($data);
-
-        session()->flash('success', '个人资料更新成功！');
-        return redirect()->route('users.show', $user);
-    }
-
-    public function destroy(User $user)
-    {
-        $this->authorize('destroy', $user);
-        $user->delete();
-        session()->flash('success', '成功删除用户！');
-        return back();
-    }
 }
